@@ -1,0 +1,25 @@
+# GPU override — layer on top of docker-compose.yml to enable NVIDIA GPU acceleration
+# for hashcat cracking (toolkit) and LLM inference (ollama sidecar).
+#
+# Requires on the HOST: an NVIDIA GPU, the NVIDIA driver, and the nvidia-container-toolkit
+# (https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/). Verify with:
+#   docker run --rm --gpus all nvidia/cuda:12.4.0-base-ubuntu22.04 nvidia-smi
+#
+# Enable it via the Makefile flag:  GPU=1 make shell   |   GPU=1 make llm-baron
+services:
+  toolkit:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  ollama:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

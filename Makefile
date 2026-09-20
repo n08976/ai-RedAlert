@@ -1,5 +1,7 @@
 # ai-RedAlert — simple UX layer. `make help` for everything.
-COMPOSE = docker compose -f docker/docker-compose.yml
+# Set GPU=1 to layer the NVIDIA override (needs nvidia-container-toolkit on the host):
+#   GPU=1 make shell        GPU=1 make llm-baron
+COMPOSE = docker compose -f docker/docker-compose.yml $(if $(GPU),-f docker/docker-compose.gpu.yml)
 MICRO_MODEL ?= qwen2.5:3b
 BARON_MODEL ?= hf.co/AlicanKiraz0/BaronLLM-v2-OffensiveSecurityLLM-Q8:Q8_0
 
@@ -31,6 +33,10 @@ llm-baron: ## Start the LLM sidecar with BaronLLM-v2 14B (workstation, 16GB+ RAM
 llm-down: ## Stop the LLM sidecar
 	$(COMPOSE) stop ollama || true
 
+gpu-check: ## Verify the host GPU is visible to Docker (for hashcat/LLM accel)
+	docker run --rm --gpus all nvidia/cuda:12.4.0-base-ubuntu22.04 nvidia-smi || \
+	  echo "No GPU visible — install nvidia-container-toolkit, or run CPU-only (default)."
+
 test: ## Run the scope-engine self-tests (no container needed)
 	python3 tests/test_scope.py
 
@@ -44,4 +50,4 @@ down: ## Tear down the whole stack
 clean: ## Remove the toolkit image
 	docker image rm ai-redalert:latest 2>/dev/null || true
 
-.PHONY: help build shell scope llm-micro llm-baron llm-down test own down clean
+.PHONY: help build shell scope llm-micro llm-baron llm-down gpu-check test own down clean
