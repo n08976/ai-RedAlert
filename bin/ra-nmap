@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Scope-aware Nmap wrapper — the reference pattern for every ra-* tool.
+#
+#   1. The LAST argument is treated as the target and checked against scope.
+#   2. Excluded hosts inside an authorized range are passed to nmap as --exclude.
+#   3. Output is auto-saved into the active engagement's scans/ folder (-oA).
+#   4. The invocation is logged to the engagement command log.
+#
+# Anything you'd pass to nmap, you pass here:
+#   ra-nmap -sC -sV 10.10.10.50
+#   ra-nmap -sS -p- 10.10.10.0/24
+set -euo pipefail
+RA_HOME="${REDALERT_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"
+PY="python3"
+
+[ $# -ge 1 ] || { echo "usage: ra-nmap [nmap opts] <target>" >&2; exit 2; }
+
+# Target is the final positional argument.
+target="${!#}"
+
+# Enforce scope. Fail closed.
+if ! $PY "$RA_HOME/lib/scope.py" "$target" >/dev/null 2>&1; then
+  $PY "$RA_HOME/lib/scope.py" "$target"   # re-run to print the reason
+  echo "ra-nmap: refusing to run out of scope." >&2
+  exit 3
+fi
+
+# Gather excluded hosts inside the target range.
+excludes="$($PY -c "import sys,scope; print(','.join(scope.excluded_hosts_in(sys.argv[1])))" "$target" 2>/dev/null || true)"
+exclude_arg=()
+[ -n "$excludes" ] && exclude_arg=(--exclude "$excludes")
+
+# Route output into the engagement.
+outbase="$($PY -c "import evidence,sys; print(evidence.scan_path('nmap_'+sys.argv[1].replace('/','-')))" "$target")"
+
+$PY "$RA_HOME/lib/evidence.py" >/dev/null 2>&1 || true
+echo "[ra-nmap] target=$target  ${excludes:+excluding=$excludes}  out=$outbase.*"
+$PY -c "import evidence,sys; evidence.log_command(['ra-nmap']+sys.argv[1:])" "$@" 2>/dev/null || true
+
+exec nmap "${exclude_arg[@]}" -oA "$outbase" "$@"

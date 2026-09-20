@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# ra-ai — query the local LLM advisor (Ollama sidecar) from the toolkit shell.
+#
+# The advisor is an OFFLINE assistant for the authorized lab: explaining tool output,
+# suggesting next enumeration steps, decoding a hash type, drafting report language.
+# It never runs tools itself — it advises; you decide and act inside scope.
+#
+#   ra-ai "what does this nmap output suggest for next steps?" < scan.txt
+#   ra-ai "identify this hash type: $HASH"
+set -euo pipefail
+HOST="${OLLAMA_HOST:-http://ollama:11434}"
+MODEL="${RA_AI_MODEL:-qwen2.5:3b}"
+
+SYSTEM="You are an offensive-security lab assistant for AUTHORIZED testing only. \
+The operator works exclusively against systems they own or are contracted to test. \
+Give concrete, practical guidance: tool commands, enumeration paths, hash/service \
+identification, and report wording. Be concise and technical."
+
+prompt="${*:-}"
+# Append piped stdin (e.g. scan output) if present.
+if [ ! -t 0 ]; then
+  piped="$(cat)"
+  prompt="${prompt}"$'\n\n---\n'"${piped}"
+fi
+[ -n "$prompt" ] || { echo "usage: ra-ai \"question\"   (optionally pipe context on stdin)" >&2; exit 2; }
+
+if ! curl -fsS "$HOST/api/tags" >/dev/null 2>&1; then
+  echo "ra-ai: no LLM sidecar reachable at $HOST" >&2
+  echo "       start one on the host with:  make llm-micro   (or make llm-baron)" >&2
+  exit 4
+fi
+
+curl -fsS "$HOST/api/generate" -d "$(jq -n --arg m "$MODEL" --arg s "$SYSTEM" --arg p "$prompt" \
+  '{model:$m, system:$s, prompt:$p, stream:false}')" | jq -r '.response'

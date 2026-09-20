@@ -1,0 +1,33 @@
+# Engagement output — never commit captured results, loot, or scans
+/engagements/*
+!/engagements/.gitkeep
+!/engagements/README.md
+
+# Local, host-specific scope (real target lists stay out of git)
+/scope/scope.yaml
+/scope/*.local.yaml
+
+# Secrets & creds
+*.pem
+*.key
+*.ovpn
+.env
+.env.*
+secrets/
+
+# LLM model blobs — pulled at runtime, never committed
+/llm/models/
+*.gguf
+
+# Python / build
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/

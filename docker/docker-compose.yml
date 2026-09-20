@@ -1,0 +1,51 @@
+# ai-RedAlert compose stack.
+#
+#   toolkit  — the offensive toolset (always on)
+#   ollama   — optional local LLM advisor sidecar, gated behind profiles:
+#                 --profile micro   pulls a small ~3B model (laptop-friendly)
+#                 --profile baron   pulls BaronLLM-v2 14B (workstation, 16GB+ RAM)
+#
+# The toolkit talks to the sidecar over HTTP at http://ollama:11434 (see bin/ra-ai).
+# Models are stored in a named volume and pulled at runtime — never baked into the image.
+
+services:
+  toolkit:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: ai-redalert:latest
+    container_name: redalert-toolkit
+    hostname: redalert
+    stdin_open: true
+    tty: true
+    environment:
+      REDALERT_ENGAGEMENT: ${REDALERT_ENGAGEMENT:-}
+      OLLAMA_HOST: http://ollama:11434
+    volumes:
+      - ../scope:/opt/redalert/scope
+      - ../engagements:/opt/redalert/engagements
+      - ../skills:/opt/redalert/skills
+    # --- Hardware passthrough (uncomment as needed) -------------------------
+    # Wi-Fi: pass a USB adapter + capabilities for monitor mode / injection.
+    # network_mode: host
+    # cap_add: [NET_ADMIN, NET_RAW]
+    # devices: ["/dev/bus/usb:/dev/bus/usb"]
+    # GPU hash cracking with hashcat (needs nvidia-container-toolkit on host):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+    # ------------------------------------------------------------------------
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: redalert-ollama
+    profiles: ["micro", "baron"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    # For GPU-accelerated inference, add the same nvidia deploy block as above.
+
+volumes:
+  ollama_models:

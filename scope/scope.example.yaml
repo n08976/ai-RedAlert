@@ -1,0 +1,19 @@
+# ai-RedAlert scope allowlist — copy to scope/scope.yaml and edit.
+#
+# This file is the guardrail. Every ra-* tool refuses any target not covered here.
+# List ONLY systems you own or have explicit written permission to test.
+# scope/scope.yaml is git-ignored so your real target lists never get committed.
+
+engagement: home-lab-2026
+authorized_by: "self — personal lab, all nodes owned by me"
+expires: 2026-12-31          # scope goes stale after this date (fail closed)
+
+targets:
+  - 10.10.10.0/24            # lab subnet (CIDR)
+  - 192.168.56.101           # single victim VM
+  - metasploitable.local     # by hostname (resolved + range-checked)
+
+exclude:
+  - 10.10.10.1               # never touch the gateway/router
+
+ports: all                   # or a list, e.g. [21, 22, 80, 139, 445, 3389]

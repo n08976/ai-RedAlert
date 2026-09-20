@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# ai-RedAlert control CLI. Single entry point: engagements, scope, help.
+set -euo pipefail
+
+RA_HOME="${REDALERT_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+PY="python3"
+export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"
+
+usage() {
+  cat <<USAGE
+ai-RedAlert — authorized offensive-security lab toolkit
+
+  ra new <name>            Start a new engagement (creates a timestamped evidence folder)
+  ra use <slug>            Switch the active engagement
+  ra list                  List engagements
+  ra scope                 Show the active scope allowlist
+  ra check <target...>     Test whether target(s) are in scope
+  ra tools                 List available ra-* tool wrappers
+  ra help                  This message
+
+Scope file : ${REDALERT_SCOPE:-$RA_HOME/scope/scope.yaml}
+Engagement : ${REDALERT_ENGAGEMENT:-<none active>}
+USAGE
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  new)
+    [ $# -ge 1 ] || { echo "usage: ra new <name>" >&2; exit 2; }
+    summary="$($PY "$RA_HOME/lib/scope.py" --show 2>/dev/null || echo 'no scope loaded')"
+    path="$($PY "$RA_HOME/lib/evidence.py" new "$1" "$summary")"
+    echo "Engagement created: $path"
+    echo "Activate it with:   export REDALERT_ENGAGEMENT=$(basename "$path")"
+    ;;
+  use)
+    [ $# -ge 1 ] || { echo "usage: ra use <slug>" >&2; exit 2; }
+    echo "export REDALERT_ENGAGEMENT=$1"
+    ;;
+  list)
+    ls -1 "${REDALERT_ENGAGEMENTS_DIR:-$RA_HOME/engagements}" 2>/dev/null \
+      | grep -v '^\.gitkeep$' || echo "(no engagements yet)"
+    ;;
+  scope)   $PY "$RA_HOME/lib/scope.py" --show ;;
+  check)   $PY "$RA_HOME/lib/scope.py" "$@" ;;
+  tools)   ls -1 "$RA_HOME/bin" | grep '^ra-' || true ;;
+  help|-h|--help) usage ;;
+  *) echo "unknown command: $cmd" >&2; usage >&2; exit 2 ;;
+esac
