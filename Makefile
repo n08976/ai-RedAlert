@@ -34,10 +34,14 @@ llm-down: ## Stop the LLM sidecar
 test: ## Run the scope-engine self-tests (no container needed)
 	python3 tests/test_scope.py
 
+own: ## Reclaim host ownership of engagement files (root-owned; tools need root)
+	docker run --rm -v $(PWD)/engagements:/e ai-redalert:latest chown -R $(shell id -u):$(shell id -g) /e
+	@echo "engagement files now owned by you"
+
 down: ## Tear down the whole stack
 	$(COMPOSE) down
 
 clean: ## Remove the toolkit image
 	docker image rm ai-redalert:latest 2>/dev/null || true
 
-.PHONY: help build shell scope llm-micro llm-baron llm-down test down clean
+.PHONY: help build shell scope llm-micro llm-baron llm-down test own down clean

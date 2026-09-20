@@ -40,6 +40,9 @@ make llm-micro      # ~3B model, laptop-friendly
 make llm-baron      # BaronLLM-v2 14B, workstation (16GB+ RAM)
 ```
 
+> **Note:** engagement files are root-owned on the host (the tools need root inside the
+> container). Run `make own` to reclaim ownership of `engagements/`.
+
 Everything captured during a session lands in `engagements/<date>-<name>/` — scans,
 loot, notes, and a timeline you can fold straight into a report.
 

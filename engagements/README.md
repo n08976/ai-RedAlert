@@ -14,3 +14,11 @@ Each subfolder here is one engagement's captured evidence, created by `ra new <n
 **Everything here except this README is git-ignored** — captured results, loot, and creds
 never get committed. This is your report-writing material; keep it local and wipe what you
 no longer need.
+
+## A note on file ownership
+Pentest tools (SYN scans, Wi-Fi monitor mode, Responder) need root inside the container,
+so files written here are **root-owned on the host**. Reclaim them anytime with:
+
+```bash
+make own
+```

@@ -43,7 +43,13 @@ RUN [ -f /usr/share/wordlists/rockyou.txt.gz ] && gunzip -k /usr/share/wordlists
 
 WORKDIR /opt/redalert
 COPY . /opt/redalert
-RUN chmod +x /opt/redalert/bin/* /opt/redalert/docker/entrypoint.sh 2>/dev/null || true
+# Make wrappers executable, expose them on PATH for ALL shell types (login shells
+# re-source /etc/profile and can drop the ENV PATH, so symlink into /usr/local/bin —
+# the wrappers resolve REDALERT_HOME from the env, so symlinks don't confuse them),
+# and add a profile.d fallback.
+RUN chmod +x /opt/redalert/bin/* /opt/redalert/docker/entrypoint.sh 2>/dev/null || true \
+    && ln -sf /opt/redalert/bin/* /usr/local/bin/ \
+    && printf 'export PATH=/opt/redalert/bin:$PATH\n' > /etc/profile.d/redalert.sh
 
 ENTRYPOINT ["/opt/redalert/docker/entrypoint.sh"]
 CMD ["bash"]

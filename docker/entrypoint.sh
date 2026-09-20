@@ -3,6 +3,12 @@
 set -euo pipefail
 RA_HOME="${REDALERT_HOME:-/opt/redalert}"
 
+# Banner + scope status are for interactive sessions. Stay quiet for piped/helper
+# invocations (make own, ra scope, scripted runs) so their output isn't buried.
+if [ ! -t 0 ] || [ -n "${REDALERT_QUIET:-}" ]; then
+  exec "$@"
+fi
+
 cat <<'BANNER'
    ___   _    ___         _   _  _         _
   / _ \ (_)  | _ \___ __| | | || |___ _ _| |_
