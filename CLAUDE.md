@@ -13,6 +13,9 @@ scoped — this is the operator's own lab and test nodes.
 - Optional **Ollama LLM sidecar** (`micro`/`baron` profiles, pulled at runtime).
 - Curated **skills** vendored from Anthropic-Cybersecurity-Skills.
 
+## The orchestrator
+`lib/orchestrator.py` is the core feature: `ra auto <IP|host|URL|CIDR>` (autonomous recon→triage→act→report) and `ra run --only <cats>` (explicit). Extend service coverage via `_kb()`. Safe plays auto-run; exploitation is gated behind `--exploit`.
+
 ## Conventions
 - New tool wrapper → copy `bin/ra-nmap` (enforce scope → inject excludes → route output →
   log → exec). Keep the target as the last positional arg.

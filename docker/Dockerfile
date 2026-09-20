@@ -36,7 +36,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       aircrack-ng hcxtools hcxdumptool \
       # wordlists
       wordlists seclists \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*.deb
 
 # SecLists / rockyou live under /usr/share; expose a stable path.
 RUN [ -f /usr/share/wordlists/rockyou.txt.gz ] && gunzip -k /usr/share/wordlists/rockyou.txt.gz || true

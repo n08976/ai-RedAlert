@@ -58,6 +58,33 @@ Every tool wrapper: (1) parses the target, (2) enforces scope, (3) injects exclu
 your arguments passed through. `bin/ra-nmap` is the reference implementation; adding
 `ra-hydra`, `ra-hashcat`, etc. follows the same shape.
 
+
+## The orchestrator (`lib/orchestrator.py`) — the offensive mindset
+
+The engine that makes ai-RedAlert more than a bundle of tools. `ra auto <target>` runs a
+five-stage loop:
+
+1. **Recon** — tiered nmap: host discovery on a CIDR, then `-sV -sC` service/version on
+   each live host (all 65535 ports with `--full`).
+2. **Model** — parse nmap XML into `Host -> Service` objects (port, product, version, TLS).
+3. **Triage** — for each service, look up ordered *plays* from a knowledge base
+   (`_kb()`), run `searchsploit` on the product+version, and match relevant vendored
+   skills. Each play is tagged `enum` / `vuln` / `exploit` with a MITRE technique.
+4. **Act** — auto-run the `enum` and `vuln` plays (non-destructive) and capture output;
+   `exploit` plays are listed only, unless `--exploit` is passed.
+5. **Report** — write `attackplan_<host>.md` (ranked plays + commands + techniques +
+   skills), optionally topped with an LLM-synthesised narrative plan.
+
+`ra run --only <categories>` is the explicit variant: same engine, restricted to the
+service categories you name. The design keeps a hard line at the exploit boundary — the
+tool enumerates and validates automatically but does not detonate exploits without an
+explicit flag, mirroring how an operator actually works and protecting lab services.
+
+### Extending the mindset
+- New service coverage → add plays to `_kb()` (and a `CATEGORY_SERVICES` entry).
+- The LLM layer (`llm_synthesize`) is optional and fails gracefully; the rule-based KB
+  works with no model at all.
+
 ## Extending
 - New tool wrapper → copy `bin/ra-nmap`, swap the final `exec`.
 - New skill → drop a `SKILL.md` under `skills/` (see `skills/README.md`).
