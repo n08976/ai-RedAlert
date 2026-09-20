@@ -51,5 +51,12 @@ RUN chmod +x /opt/redalert/bin/* /opt/redalert/docker/entrypoint.sh 2>/dev/null 
     && ln -sf /opt/redalert/bin/* /usr/local/bin/ \
     && printf 'export PATH=/opt/redalert/bin:$PATH\n' > /etc/profile.d/redalert.sh
 
+# Nmap ships with file capabilities (cap_net_admin+eip) that exceed Docker's default
+# capability bounding set, so the kernel refuses to exec it ("Operation not permitted")
+# in an unprivileged container. We run as root, which already has NET_RAW, so strip the
+# file caps — plain `docker run` then works. For SYN scans / OS detection, compose also
+# grants NET_RAW + NET_ADMIN (see docker-compose.yml).
+RUN setcap -r /usr/lib/nmap/nmap 2>/dev/null || true
+
 ENTRYPOINT ["/opt/redalert/docker/entrypoint.sh"]
 CMD ["bash"]

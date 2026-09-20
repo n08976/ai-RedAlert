@@ -18,9 +18,15 @@ services:
     hostname: redalert
     stdin_open: true
     tty: true
+    # Raw sockets for SYN scans, OS detection, and Responder. (Wi-Fi monitor mode needs
+    # more — see the passthrough block below.)
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
     environment:
       REDALERT_ENGAGEMENT: ${REDALERT_ENGAGEMENT:-}
       OLLAMA_HOST: http://ollama:11434
+      RA_AI_MODEL: ${RA_AI_MODEL:-qwen2.5:3b}
     volumes:
       - ../scope:/opt/redalert/scope
       - ../engagements:/opt/redalert/engagements

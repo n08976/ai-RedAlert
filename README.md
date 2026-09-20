@@ -40,6 +40,31 @@ make llm-micro      # ~3B model, laptop-friendly
 make llm-baron      # BaronLLM-v2 14B, workstation (16GB+ RAM)
 ```
 
+## Two ways to drive it
+
+**Autonomous** — point it at anything and let it think like an operator. It enumerates,
+runs the safe checks, and hands you a ranked attack plan:
+
+```bash
+ra new lab-box && export REDALERT_ENGAGEMENT=<slug>
+ra auto 10.10.10.50            # IP, hostname, http://host/app, or a 10.10.10.0/24 range
+ra auto 10.10.10.50 --exploit  # also run exploitation plays (deliberate)
+ra auto 10.10.10.0/24 --full   # discover live hosts, all 65535 ports
+```
+
+`ra auto` runs recon + non-destructive vuln checks automatically and writes an
+`attackplan_<host>.md` (open services → exact commands → MITRE technique → matching
+playbook, plus an LLM-synthesised plan if a model is up). Actual exploitation stays behind
+`--exploit`.
+
+**Explicit** — tell it exactly what to do:
+
+```bash
+ra run 10.10.10.50 --only web,smb     # only these service categories
+ra-nmap -sC -sV 10.10.10.50           # or drive any tool directly (scope-enforced)
+ra-hydra -L users.txt -P rockyou.txt ssh://10.10.10.50
+```
+
 > **Note:** engagement files are root-owned on the host (the tools need root inside the
 > container). Run `make own` to reclaim ownership of `engagements/`.
 

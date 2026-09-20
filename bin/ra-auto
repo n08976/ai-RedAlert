@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# ra-auto — autonomous offensive assessment of a target (IP/host/URL/CIDR).
+# Enumerates, runs safe plays, and produces a ranked attack plan. See: ra-auto --help
+set -euo pipefail
+RA_HOME="${REDALERT_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"
+exec python3 "$RA_HOME/lib/orchestrator.py" "$@"

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# ra-run — explicit mode: run chosen categories against a target.
+#   ra-run --only web,smb 10.10.10.50
+set -euo pipefail
+RA_HOME="${REDALERT_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"
+exec python3 "$RA_HOME/lib/orchestrator.py" "$@"
