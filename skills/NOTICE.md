@@ -10,3 +10,9 @@ This directory vendors a curated subset of skills from:
 
 ai-RedAlert itself is Apache-2.0 (see repository root `LICENSE`). Vendored material remains
 under its upstream license.
+
+## This vendored subset
+Selected by `scripts/select_skills.py` (classification by frontmatter tags/subdomain):
+**208 offensive skills** across recon / web / wifi / cred-access / exploitation /
+post-exploitation, out of 818 upstream. See `skills/INDEX.md` for the full list. Each
+skill retains its upstream frontmatter, author, and Apache-2.0 license.

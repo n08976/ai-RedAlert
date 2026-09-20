@@ -1,0 +1,230 @@
+# Curated offensive skills — index
+
+Vendored subset from [Anthropic-Cybersecurity-Skills](https://github.com/mukul975/Anthropic-Cybersecurity-Skills) (Apache-2.0). See NOTICE.md.
+
+
+## recon (21)
+
+- **building-threat-actor-profile-from-osint** — Build threat actor profiles by collecting OSINT from vendor reports, paste sites, dark web forums, social media, and cod
+- **collecting-open-source-intelligence** — 'Collects and synthesizes open-source intelligence (OSINT) about threat
+- **conducting-external-reconnaissance-with-osint** — Conduct external recon using OSINT techniques to map an organization's external attack surface without touching target s
+- **conducting-internal-reconnaissance-with-bloodhound-ce** — Conduct internal Active Directory reconnaissance using BloodHound Community Edition's graph database with the SharpHound
+- **conducting-social-engineering-penetration-test** — Design and execute a social engineering penetration test combining OSINT-driven target profiling with phishing, vishing,
+- **detecting-api-enumeration-attacks** — Detect API enumeration attacks (BOLA/IDOR, OWASP API1:2023) by writing SIEM
+- **detecting-network-scanning-with-ids-signatures** — Detect network reconnaissance and port scanning using Suricata and Snort
+- **enumerating-cloud-with-cloudfox** — Run CloudFox's read-only Describe/List/Get enumeration (all-checks,
+- **implementing-attack-surface-management** — 'Implements external attack surface management (EASM) using Shodan, Censys,
+- **monitoring-darkweb-sources** — 'Monitors dark web forums, marketplaces, paste sites, and ransomware
+- **performing-ai-driven-osint-correlation** — Use AI/LLM-based reasoning with Sherlock, theHarvester, and SpiderFoot
+- **performing-aws-account-enumeration-with-scout-suite** — Run the agentless, open-source ScoutSuite tool (via pip install and the `scout` CLI)
+- **performing-dns-enumeration-and-zone-transfer** — 'Enumerates DNS records, attempts zone transfers, brute-forces subdomains,
+- **performing-external-network-penetration-test** — Conduct a comprehensive external network penetration test to identify
+- **performing-ip-reputation-analysis-with-shodan** — Analyze IP address reputation using the Shodan API to identify open ports,
+- **performing-open-source-intelligence-gathering** — Open Source Intelligence (OSINT) gathering is the first active phase
+- **performing-osint-with-spiderfoot** — Automate OSINT collection with the SpiderFoot REST API and CLI (sf.py/spiderfoot-cli) across 200+ modules, selecting sca
+- **performing-paste-site-monitoring-for-credentials** — Monitor paste sites like Pastebin and GitHub Gists for leaked credentials,
+- **performing-privileged-account-discovery** — Discovers and inventories privileged accounts across enterprise infrastructure,
+- **performing-subdomain-enumeration-with-subfinder** — Enumerate subdomains of target domains using ProjectDiscovery's Subfinder
+- **scanning-network-with-nmap-advanced** — 'Performs advanced network recon using Nmap''s Scripting Engine (NSE),
+
+## web (41)
+
+- **auditing-mcp-servers-for-tool-poisoning** — Audit MCP servers for tool poisoning, tool shadowing, rug pulls, SSRF, and unauthenticated exposure using Invariant Labs
+- **exploiting-api-injection-vulnerabilities** — >-
+- **exploiting-http-request-smuggling** — >-
+- **exploiting-idor-vulnerabilities** — >-
+- **exploiting-insecure-deserialization** — Identifying and exploiting insecure deserialization vulnerabilities in
+- **exploiting-nosql-injection-vulnerabilities** — Detects and exploits NoSQL injection vulnerabilities in MongoDB, CouchDB,
+- **exploiting-oauth-misconfiguration** — Identifying and exploiting OAuth 2.0 and OpenID Connect misconfigurations
+- **exploiting-prototype-pollution-in-javascript** — Detects and exploits JavaScript prototype pollution vulnerabilities
+- **exploiting-server-side-request-forgery** — Identifying and exploiting SSRF vulnerabilities to access internal services,
+- **exploiting-sql-injection-with-sqlmap** — Detecting and exploiting SQL injection vulnerabilities using sqlmap to
+- **exploiting-template-injection-vulnerabilities** — Detects and exploits Server-Side Template Injection (SSTI) vulnerabilities
+- **exploiting-type-juggling-vulnerabilities** — Exploits PHP type juggling vulnerabilities caused by loose (==) comparison
+- **exploiting-websocket-vulnerabilities** — Testing WebSocket implementations for authentication bypass, cross-site
+- **implementing-runtime-application-self-protection** — Deploy Runtime Application Self-Protection (RASP) agents to detect and
+- **implementing-web-application-logging-with-modsecurity** — Configure ModSecurity WAF with the OWASP Core Rule Set (CRS) for web
+- **performing-blind-ssrf-exploitation** — Detect and exploit blind Server-Side Request Forgery (SSRF) using out-of-band
+- **performing-clickjacking-attack-test** — Testing web applications for clickjacking vulnerabilities by assessing
+- **performing-content-security-policy-bypass** — Analyze Content-Security-Policy headers and bypass them to achieve cross-site
+- **performing-csrf-attack-simulation** — Testing web applications for Cross-Site Request Forgery vulnerabilities
+- **performing-directory-traversal-testing** — Test web applications for path traversal and Local/Remote File Inclusion
+- **performing-graphql-security-assessment** — Assessing GraphQL API endpoints for introspection leaks, injection attacks,
+- **performing-http-parameter-pollution-attack** — Executes HTTP Parameter Pollution attacks that inject duplicate request
+- **performing-jwt-none-algorithm-attack** — Execute and test the JWT none algorithm attack, crafting tokens with
+- **performing-malware-hash-enrichment-with-virustotal** — Enrich malware file hashes (MD5, SHA-1, SHA-256) using the VirusTotal
+- **performing-second-order-sql-injection** — Detect and exploit second-order SQL injection vulnerabilities where malicious
+- **performing-security-headers-audit** — Auditing HTTP security headers including CSP, HSTS, X-Frame-Options,
+- **performing-ssrf-vulnerability-exploitation** — >-
+- **performing-web-application-firewall-bypass** — Bypasses Web Application Firewall protections using encoding tricks,
+- **performing-web-application-vulnerability-triage** — Triages web application vulnerability findings from DAST/SAST scanners
+- **performing-web-cache-poisoning-attack** — Exploiting web cache mechanisms to serve malicious content to other users
+- **testing-api-for-broken-object-level-authorization** — 'Tests REST and GraphQL APIs for Broken Object Level Authorization (BOLA/IDOR,
+- **testing-cors-misconfiguration** — Identifying and exploiting Cross-Origin Resource Sharing misconfigurations
+- **testing-for-broken-access-control** — Systematically tests web applications and APIs for broken access control
+- **testing-for-business-logic-vulnerabilities** — Manually identifies flaws in application business logic - price manipulation,
+- **testing-for-host-header-injection** — Test web applications for HTTP Host header injection vulnerabilities
+- **testing-for-sensitive-data-exposure** — Identifying sensitive data exposure vulnerabilities including API key
+- **testing-for-xml-injection-vulnerabilities** — Test web applications for XML injection vulnerabilities including XXE,
+- **testing-for-xss-vulnerabilities** — Tests web applications for reflected, stored, and DOM-based Cross-Site
+- **testing-for-xss-vulnerabilities-with-burpsuite** — Identifying and validating cross-site scripting vulnerabilities using
+- **testing-for-xxe-injection-vulnerabilities** — Discovering and exploiting XML External Entity injection vulnerabilities
+- **testing-jwt-token-security** — Assessing JSON Web Token implementations for cryptographic weaknesses,
+
+## wifi (4)
+
+- **conducting-wireless-network-penetration-test** — 'Conducts authorized wireless network penetration tests to assess the
+- **performing-wifi-password-cracking-with-aircrack** — 'Captures WPA/WPA2 handshakes and performs offline password cracking
+- **performing-wireless-network-penetration-test** — Execute a wireless network penetration test to assess WiFi security by
+- **performing-wireless-security-assessment-with-kismet** — Conduct wireless network security assessments using Kismet to detect
+
+## cred-access (17)
+
+- **abusing-dpapi-for-credential-access** — Extract and decrypt Windows DPAPI-protected secrets (Credential Manager, browser logins/cookies, Wi-Fi credentials, KeeP
+- **conducting-internal-network-penetration-test** — Execute an internal network penetration test simulating an insider threat
+- **deploying-active-directory-honeytokens** — 'Deploys deception-based honeytokens in Active Directory including fake
+- **detecting-anomalous-authentication-patterns** — 'Detects anomalous authentication patterns using UEBA analytics, statistical
+- **detecting-kerberoasting-attacks** — Detect Kerberoasting attacks by monitoring for anomalous Kerberos TGS
+- **detecting-ntlm-relay-with-event-correlation** — Detect NTLM relay attacks (T1557.001) by correlating Windows Event 4624 LogonType 3 for IP-to-hostname mismatches, ident
+- **detecting-pass-the-hash-attacks** — Detect Pass-the-Hash (T1550.002) attacks by analyzing NTLM authentication patterns, flagging Type 3 logons using NTLM wh
+- **detecting-rdp-brute-force-attacks** — Detect RDP brute force attacks by parsing Windows Security Event Logs
+- **executing-active-directory-attack-simulation** — 'Executes authorized attack simulations against Active Directory environments
+- **exploiting-kerberoasting-with-impacket** — >-
+- **hunting-for-dcsync-attacks** — Detect DCSync attacks (MITRE ATT&CK T1003.006) by analyzing Windows Event ID 4662 (AccessMask 0x100) for DS-Replication-
+- **hunting-for-ntlm-relay-attacks** — Detects NTLM relay attacks (MITRE T1557.001) by analyzing Windows Event
+- **moving-laterally-with-netexec** — Use NetExec (nxc) to validate credentials, enumerate SMB shares/users/policy, password-spray safely across lockout thres
+- **performing-active-directory-penetration-test** — Conduct a focused Active Directory penetration test using BloodHound,
+- **performing-api-rate-limiting-bypass** — 'Tests API rate limiting for bypass vulnerabilities using Python (requests/aiohttp)
+- **performing-credential-access-with-lazagne** — Extract stored credentials from compromised endpoints using the LaZagne
+- **performing-kerberoasting-attack** — Perform Kerberoasting, a post-exploitation technique that enumerates
+
+## exploitation (13)
+
+- **conducting-network-penetration-test** — 'Conducts comprehensive network penetration tests against authorized
+- **conducting-pass-the-ticket-attack** — Perform Pass-the-Ticket (PtT) lateral movement by extracting Kerberos TGT/TGS tickets from LSASS memory on a compromised
+- **conducting-spearphishing-simulation-campaign** — Run a targeted spearphishing simulation for initial access by developing OSINT-derived pretexts, building payloads (HTML
+- **executing-red-team-engagement-planning** — Build the foundational red team engagement plan - scope definition, Rules
+- **exploiting-active-directory-with-bloodhound** — BloodHound is a graph-based Active Directory reconnaissance tool that
+- **exploiting-ms17-010-eternalblue-vulnerability** — >-
+- **exploiting-smb-vulnerabilities-with-metasploit** — 'Identifies and exploits SMB protocol vulnerabilities using Metasploit
+- **exploiting-vulnerabilities-with-metasploit-framework** — Uses the Metasploit Framework (msfconsole and its exploit, auxiliary,
+- **hunting-for-spearphishing-indicators** — Hunt for spearphishing campaign indicators across email logs, endpoint
+- **hunting-for-supply-chain-compromise** — Runs a hypothesis-driven threat hunt for supply-chain compromise (T1195) by querying SIEM/EDR logs for trojanized softwa
+- **performing-binary-exploitation-analysis** — 'Analyze ELF binaries for memory-corruption vulnerabilities and build proof-of-concept
+- **performing-initial-access-with-evilginx3** — Perform authorized initial access using EvilGinx3 adversary-in-the-middle
+- **performing-privilege-escalation-on-linux** — Guides manual enumeration and automated tooling to escalate from a low-privilege
+
+## post-exploitation (112)
+
+- **abusing-shadow-credentials-for-privesc** — Take over Active Directory accounts by writing attacker-controlled public keys to msDS-KeyCredentialLink (Shadow Credent
+- **analyzing-active-directory-acl-abuse** — Detect dangerous ACL misconfigurations in Active Directory using ldap3
+- **analyzing-cobalt-strike-beacon-configuration** — Extract and analyze Cobalt Strike beacon configuration from PE files
+- **analyzing-command-and-control-communication** — 'Analyzes malware C2 communication over HTTP, HTTPS, DNS, and custom
+- **analyzing-kubernetes-audit-logs** — >-
+- **analyzing-malware-persistence-with-autoruns** — Use Sysinternals Autoruns to systematically enumerate and analyze malware
+- **analyzing-powershell-empire-artifacts** — Detect PowerShell Empire post-exploitation framework artifacts in Windows Script Block Logging (Event ID 4104) and Modul
+- **analyzing-uefi-bootkit-persistence** — 'Analyzes UEFI bootkit persistence (SPI flash implants, ESP modifications,
+- **analyzing-windows-event-logs-in-splunk** — 'Analyzes Windows Security, System, and Sysmon event logs in Splunk to
+- **attacking-entra-id-with-roadtools** — Enumerate Microsoft Entra ID (Azure AD) tenants with ROADrecon and
+- **attacking-oauth-with-device-code-phishing** — Run OAuth 2.0 device-code and illicit-consent phishing attacks against
+- **auditing-azure-active-directory-configuration** — 'Auditing Microsoft Entra ID (Azure Active Directory) configuration to
+- **auditing-entra-id-with-aadinternals** — Drive the AADInternals PowerShell toolkit to perform Microsoft Entra ID tenant reconnaissance, access-token acquisition 
+- **auditing-kubernetes-rbac-privilege-escalation** — >-
+- **building-adversary-infrastructure-tracking-system** — Build an automated adversary infrastructure tracking system in Python (dnspython, python-whois, shodan, networkx) that p
+- **building-c2-infrastructure-with-sliver-framework** — Deploy and harden a Sliver C2 team server (BishopFox's Go-based adversary emulation framework) with multi-protocol liste
+- **building-c2-redirector-infrastructure** — Build dumb-pipe and traffic-filtering C2 redirectors with nginx (proxy_pass) and Apache (mod_rewrite), deriving filter r
+- **building-red-team-c2-infrastructure-with-havoc** — Deploy and configure the Havoc C2 framework (teamserver, HTTPS/HTTP/SMB
+- **coercing-authentication-with-coercer-petitpotam** — Trigger machine account authentication with PetitPotam (MS-EFSR) and Coercer (MS-RPRN, MS-DFSNM, MS-FSRVP, MS-EVEN) via 
+- **conducting-api-security-testing** — 'Conducts security testing of REST, GraphQL, and gRPC APIs to identify
+- **conducting-cloud-penetration-testing** — 'This skill outlines methodologies for performing authorized penetration
+- **conducting-domain-persistence-with-dcsync** — Perform DCSync attacks by abusing MS-DRSR replication rights (DS-Replication-Get-Changes/-All) to impersonate a Domain C
+- **conducting-full-scope-red-team-engagement** — Plan and execute a comprehensive, MITRE ATT&CK-aligned red team engagement spanning threat modeling, reconnaissance, ini
+- **conducting-mobile-app-penetration-test** — 'Conducts penetration testing of iOS and Android mobile applications
+- **conducting-social-engineering-pretext-call** — Plan and execute authorized vishing (voice phishing) pretext calls to
+- **configuring-active-directory-tiered-model** — Implement Microsoft's Enhanced Security Admin Environment (ESAE) tiered
+- **configuring-microsegmentation-for-zero-trust** — Configures microsegmentation policies to enforce least-privilege workload-to-workload
+- **containing-active-breach** — 'Executes containment strategies to stop active adversary operations
+- **detecting-attacks-on-historian-servers** — 'Detect cyber attacks on OT historian servers (OSIsoft PI, Ignition, GE
+- **detecting-aws-iam-privilege-escalation** — Detect AWS IAM privilege escalation paths using boto3 and Cloudsplaining
+- **detecting-azure-lateral-movement** — Detect lateral movement in Azure AD/Entra ID environments using Microsoft
+- **detecting-azure-service-principal-abuse** — Detect Azure service principal abuse in Microsoft Entra ID using KQL detection
+- **detecting-command-and-control-over-dns** — 'Detect command-and-control (C2) traffic tunneled over DNS from tools like
+- **detecting-credential-dumping-techniques** — Detect LSASS credential dumping, SAM database extraction, and NTDS.dit theft (e.g. via Mimikatz) using Sysmon Event ID 1
+- **detecting-dcsync-attack-in-active-directory** — Detect DCSync attacks (MITRE T1003.006) where adversaries abuse Active Directory replication privileges to extract passw
+- **detecting-dll-sideloading-attacks** — Detect DLL side-loading and search-order hijacking (MITRE T1574) where adversaries plant malicious DLLs for legitimate s
+- **detecting-email-forwarding-rules-attack** — Detect malicious inbox/mail-flow forwarding rules that adversaries create to maintain
+- **detecting-evasion-techniques-in-endpoint-logs** — 'Detects defense evasion techniques used by adversaries in endpoint logs
+- **detecting-golden-ticket-attacks-in-kerberos-logs** — Detect Golden Ticket attacks in Active Directory using Splunk and KQL queries
+- **detecting-golden-ticket-forgery** — Detect Kerberos Golden Ticket forgery (e.g. Mimikatz-forged tickets) by analyzing
+- **detecting-lateral-movement-in-network** — 'Identifies lateral movement techniques in enterprise networks by analyzing
+- **detecting-lateral-movement-with-splunk** — Detect adversary lateral movement across networks using Splunk SPL queries
+- **detecting-lateral-movement-with-zeek** — 'Detect lateral movement in network traffic using Zeek (formerly Bro)
+- **detecting-malicious-scheduled-tasks-with-sysmon** — 'Detect malicious scheduled task creation and modification using Sysmon
+- **detecting-pass-the-ticket-attacks** — Detect Kerberos Pass-the-Ticket (PtT) attacks by analyzing Windows Event IDs 4768, 4769, and 4771 for anomalous ticket u
+- **detecting-privilege-escalation-attempts** — Detect privilege escalation attempts across Windows and Linux, including access token manipulation, UAC bypass, unquoted
+- **detecting-privilege-escalation-in-kubernetes-pods** — >-
+- **detecting-process-injection-techniques** — 'Detects and analyzes process injection techniques used by malware including
+- **detecting-service-account-abuse** — Detect abuse of service accounts by hunting for anomalous interactive
+- **detecting-t1055-process-injection-with-sysmon** — Detect process injection techniques (T1055) - including DLL injection, process
+- **detecting-t1548-abuse-elevation-control-mechanism** — Detect abuse of elevation control mechanisms (T1548), including Windows UAC
+- **detecting-wmi-persistence** — Detect WMI event subscription persistence (MITRE T1546.003) by analyzing Sysmon
+- **eradicating-malware-from-infected-systems** — Systematically map and remove malware, backdoors, and attacker persistence
+- **escaping-containers-to-host** — >-
+- **executing-phishing-simulation-campaign** — 'Executes authorized phishing simulation campaigns to assess an organization''s
+- **executing-red-team-exercise** — 'Run a stealthy, MITRE ATT&CK-mapped adversary emulation against an organization''s
+- **exploiting-active-directory-certificate-services-esc1** — Exploit misconfigured Active Directory Certificate Services (AD CS) ESC1
+- **exploiting-adcs-with-certipy** — Use Certipy to enumerate AD CS certificate authorities and templates over LDAP/RPC, then exploit ESC1-ESC16 misconfigura
+- **exploiting-aws-with-pacu** — >-
+- **exploiting-broken-function-level-authorization** — >-
+- **exploiting-constrained-delegation-abuse** — >-
+- **exploiting-mass-assignment-in-rest-apis** — >-
+- **exploiting-nopac-cve-2021-42278-42287** — Exploits the noPac Active Directory privilege-escalation chain (CVE-2021-42278
+- **exploiting-sql-injection-vulnerabilities** — 'Identifies and exploits SQL injection vulnerabilities in web applications
+- **exploiting-zerologon-vulnerability-cve-2020-1472** — Exploits the Zerologon vulnerability (CVE-2020-1472) in the Netlogon
+- **hunting-for-cobalt-strike-beacons** — Detect Cobalt Strike beacon command-and-control traffic using default TLS certificate signatures (serial 8BB00EE), JA3/J
+- **hunting-for-command-and-control-beaconing** — Detect C2 beaconing patterns in network traffic using frequency analysis,
+- **hunting-for-dcom-lateral-movement** — 'Hunt for DCOM-based lateral movement (MITRE ATT&CK T1021.003) by detecting
+- **hunting-for-defense-evasion-via-timestomping** — 'Detect NTFS timestamp manipulation (MITRE T1070.006) by comparing $STANDARD_INFORMATION
+- **hunting-for-dns-based-persistence** — Hunts for DNS-based persistence mechanisms such as DNS hijacking, dangling
+- **hunting-for-lateral-movement-via-wmi** — Detects WMI-based lateral movement (e.g. wmic process call create,
+- **hunting-for-living-off-the-cloud-techniques** — Hunts for adversary abuse of legitimate cloud services (Azure, AWS, GCP,
+- **hunting-for-living-off-the-land-binaries** — Proactively hunts for adversary abuse of legitimate, signed system binaries
+- **hunting-for-lolbins-execution-in-endpoint-logs** — Hunts for LOLBins (Living Off the Land Binaries) abuse, mapped to MITRE
+- **hunting-for-persistence-mechanisms-in-windows** — Systematically hunts for adversary persistence mechanisms across Windows
+- **hunting-for-registry-persistence-mechanisms** — Hunts for registry-based persistence mechanisms (MITRE T1547) in Windows
+- **hunting-for-registry-run-key-persistence** — Detect MITRE ATT&CK T1547.001 registry Run key persistence by analyzing
+- **hunting-for-scheduled-task-persistence** — Runs a hypothesis-driven threat hunt for Windows Scheduled Task persistence (T1053), guiding SIEM/EDR queries against ta
+- **hunting-for-startup-folder-persistence** — Detects T1547.001 startup folder persistence by monitoring Windows startup directories for suspicious file creation, cro
+- **hunting-for-suspicious-scheduled-tasks** — Hunts for adversary persistence and execution via Windows scheduled tasks (T1053.005) by analyzing Security Event ID 469
+- **hunting-for-t1098-account-manipulation** — Hunts for MITRE ATT&CK T1098 account manipulation - shadow admin creation, SID history injection, group membership chang
+- **hunting-for-unusual-network-connections** — Runs a hypothesis-driven threat hunt for command-and-control activity (T1071) by querying SIEM/EDR network telemetry for
+- **hunting-for-unusual-service-installations** — Detects suspicious Windows service installations (MITRE ATT&CK T1543.003) by parsing System event log Event ID 7045, ana
+- **hunting-for-webshell-activity** — Runs a hypothesis-driven threat hunt for web shell deployment (T1505.003) on internet-facing servers by analyzing file c
+- **implementing-microsegmentation-with-guardicore** — 'Implements microsegmentation with Akamai Guardicore Segmentation to map
+- **implementing-network-deception-with-honeypots** — Deploy and manage network honeypots using OpenCanary, T-Pot, or Cowrie
+- **implementing-network-segmentation-with-firewall-zones** — Designs and implements network segmentation using firewall security zones, VLANs,
+- **implementing-siem-correlation-rules-for-apt** — Write multi-event correlation rules in Splunk SPL and Sigma format that
+- **mapping-attack-paths-with-bloodhound-ce** — Collect Active Directory data with SharpHound and Entra ID data with AzureHound, ingest into BloodHound Community Editio
+- **operating-havoc-c2** — Deploy a Havoc C2 team server with Yaotl malleable profiles, generate evasive Demon agents using indirect syscalls and s
+- **operating-sliver-c2** — Stand up a Sliver C2 server and mTLS listeners, generate cross-platform implants and beacons, and run post-exploitation,
+- **performing-active-directory-bloodhound-analysis** — Use BloodHound and SharpHound (or AzureHound) to enumerate Active Directory
+- **performing-active-directory-compromise-investigation** — Investigate Active Directory compromise by analyzing authentication logs,
+- **performing-active-directory-forest-trust-attack** — Enumerate and audit Active Directory forest trust relationships using
+- **performing-active-directory-vulnerability-assessment** — Assess Active Directory security posture using PingCastle, BloodHound,
+- **performing-aws-privilege-escalation-assessment** — 'Performing authorized privilege escalation assessments in AWS environments
+- **performing-cloud-penetration-testing-with-pacu** — 'Run authorized AWS penetration tests with Pacu, the open-source AWS exploitation
+- **performing-deception-technology-deployment** — 'Deploys deception technology including honeypots, honeytokens, and decoy
+- **performing-gcp-penetration-testing-with-gcpbucketbrute** — Performs authorized GCP security testing using GCPBucketBrute to enumerate
+- **performing-iot-security-assessment** — 'Performs comprehensive security assessments of IoT devices and their
+- **performing-kubernetes-penetration-testing** — >-
+- **performing-lateral-movement-detection** — 'Detects lateral movement techniques including Pass-the-Hash, PsExec,
+- **performing-lateral-movement-with-wmiexec** — Perform lateral movement across Windows networks using WMI-based remote
+- **performing-physical-intrusion-assessment** — Conduct authorized physical penetration testing against facilities, server rooms, and restricted areas using tailgating,
+- **performing-privilege-escalation-assessment** — 'Performs privilege escalation assessments on compromised Linux and Windows
+- **performing-purple-team-exercise** — 'Performs purple team exercises by coordinating red team adversary emulation
+- **performing-red-team-with-covenant** — Conducts red team operations using the Covenant C2 framework for authorized
+- **performing-thick-client-application-penetration-test** — Conduct a thick client application penetration test to identify insecure
+- **performing-vulnerability-scanning-with-nessus** — 'Performs authenticated and unauthenticated vulnerability scanning using
+- **performing-web-application-penetration-test** — 'Performs systematic security testing of web applications following the
+- **post-exploiting-microsoft-graph-with-graphrunner** — Runs GraphRunner, a PowerShell post-exploitation toolset built on
+- **relaying-ntlm-for-adcs-esc8** — Uses Impacket's ntlmrelayx.py with a coercion tool (PetitPotam, Coercer,
