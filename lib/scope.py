@@ -150,6 +150,37 @@ def check_target(target: str, scope: dict | None = None) -> bool:
     return True
 
 
+def check_wifi(bssid: str | None = None, essid: str | None = None, scope: dict | None = None) -> bool:
+    """Return True if a Wi-Fi target (BSSID and/or ESSID) is authorized. Raise otherwise.
+
+    Wi-Fi authorization is by access point you OWN, not by IP. The scope file's `wifi`
+    block lists authorized BSSIDs and/or ESSIDs:
+
+        wifi:
+          bssids: ["AA:BB:CC:DD:EE:FF"]
+          essids: ["my-lab-ap"]
+
+    Fail closed: no wifi block => no Wi-Fi target is authorized.
+    """
+    scope = scope or load_scope()
+    wifi = scope.get("wifi") or {}
+    bssids = {b.upper() for b in (wifi.get("bssids") or [])}
+    essids = set(wifi.get("essids") or [])
+    if not bssids and not essids:
+        raise ScopeError(
+            "No 'wifi' allowlist in scope. Add authorized BSSIDs/ESSIDs (APs you own) "
+            "before running Wi-Fi tooling. Fail closed."
+        )
+    if bssid and bssid.upper() in bssids:
+        return True
+    if essid and essid in essids:
+        return True
+    raise ScopeError(
+        f"Wi-Fi target (bssid={bssid or '?'}, essid={essid or '?'}) is NOT in the authorized "
+        f"wifi allowlist. Refusing. Only test access points you own."
+    )
+
+
 def main(argv: list[str]) -> int:
     if len(argv) < 2:
         print("usage: scope.py <target> [target ...]   |   scope.py --show", file=sys.stderr)

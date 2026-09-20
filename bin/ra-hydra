@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Scope-aware Hydra wrapper — online dictionary attacks against an authorized service.
+# Target host is taken from the LAST positional arg (as hydra expects it last too).
+#   ra-hydra -L users.txt -P /usr/share/wordlists/rockyou.txt ssh://10.10.10.50
+set -euo pipefail
+RA_HOME="${REDALERT_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"; PY=python3
+[ $# -ge 1 ] || { echo "usage: ra-hydra [hydra opts] <service://target>" >&2; exit 2; }
+
+last="${!#}"
+host="${last##*://}"; host="${host%%:*}"   # strip service:// and :port
+if ! $PY "$RA_HOME/lib/scope.py" "$host" >/dev/null 2>&1; then
+  $PY "$RA_HOME/lib/scope.py" "$host"; echo "ra-hydra: refusing (out of scope)." >&2; exit 3
+fi
+out="$($PY -c "import evidence,sys; print(evidence.scan_path('hydra_'+sys.argv[1]+'.txt'))" "$host")"
+$PY -c "import evidence,sys; evidence.log_command(['ra-hydra']+sys.argv[1:])" "$@" 2>/dev/null || true
+echo "[ra-hydra] target=$host  out=$out"
+exec hydra -o "$out" "$@"

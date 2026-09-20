@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# hashcat wrapper — offline hash cracking. Operates on local hash files (no network target,
+# so no scope check). Routes potfile + output into the active engagement.
+#   ra-hashcat -m 22000 handshake.hc22000 /usr/share/wordlists/rockyou.txt
+set -euo pipefail
+RA_HOME="${REDALERT_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"; PY=python3
+pot="$($PY -c "import evidence; print(evidence.scan_path('hashcat.potfile'))")"
+if ! command -v hashcat >/dev/null; then echo "hashcat not installed" >&2; exit 5; fi
+if ! hashcat -I >/dev/null 2>&1; then
+  echo "[ra-hashcat] note: no GPU/OpenCL device visible — running CPU-only." >&2
+  echo "             For GPU speed, pass the GPU through (see docker-compose.yml)." >&2
+fi
+$PY -c "import evidence,sys; evidence.log_command(['ra-hashcat']+sys.argv[1:])" "$@" 2>/dev/null || true
+exec hashcat --potfile-path "$pot" "$@"

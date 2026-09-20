@@ -17,3 +17,11 @@ exclude:
   - 10.10.10.1               # never touch the gateway/router
 
 ports: all                   # or a list, e.g. [21, 22, 80, 139, 445, 3389]
+
+# Wi-Fi authorization is by access point you OWN (BSSID/ESSID), not by IP.
+# Wi-Fi tooling fails closed unless the target AP is listed here.
+wifi:
+  bssids:
+    - "AA:BB:CC:DD:EE:FF"     # your lab AP's MAC
+  essids:
+    - "my-lab-ap"             # your lab AP's network name

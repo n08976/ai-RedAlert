@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Metasploit launcher — initialises the DB (first run) and starts msfconsole with logging
+# routed into the active engagement. Scope discipline inside msf is on the operator:
+# only set RHOSTS to authorized targets (check with `ra check <ip>` first).
+set -euo pipefail
+RA_HOME="${REDALERT_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"; PY=python3
+# Best-effort DB init (Postgres in the Kali image).
+service postgresql start >/dev/null 2>&1 || true
+msfdb init >/dev/null 2>&1 || true
+log="$($PY -c "import evidence; print(evidence.scan_path('msf.log'))" 2>/dev/null || echo /tmp/msf.log)"
+echo "[ra-msf] logging to $log — remember: only target hosts in your scope allowlist."
+exec msfconsole -q -o "$log" "$@"

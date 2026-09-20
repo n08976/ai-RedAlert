@@ -44,6 +44,19 @@ def run():
     except scope.ScopeError:
         print("[PASS] expired scope fails closed")
     os.unlink(sf.name); os.unlink(ef.name)
+    # wifi allowlist
+    wf = tempfile.NamedTemporaryFile("w", suffix=".yaml", delete=False)
+    wf.write(SCOPE + "\nwifi:\n  bssids: ['AA:BB:CC:DD:EE:FF']\n  essids: ['my-lab-ap']\n")
+    wf.close()
+    from pathlib import Path as _P
+    wsc = scope.load_scope(_P(wf.name))
+    try:
+        scope.check_wifi("aa:bb:cc:dd:ee:ff", None, wsc); print("[PASS] wifi bssid (case-insensitive) authorized")
+    except scope.ScopeError: print("[FAIL] wifi bssid should be authorized"); failures += 1
+    try:
+        scope.check_wifi("11:22:33:44:55:66", "rogue", wsc); print("[FAIL] rogue AP accepted"); failures += 1
+    except scope.ScopeError: print("[PASS] unauthorized AP refused")
+    os.unlink(wf.name)
     print("\n" + ("ALL PASS" if failures == 0 else f"{failures} FAILURE(S)"))
     return 1 if failures else 0
 

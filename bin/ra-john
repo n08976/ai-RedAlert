@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# John the Ripper wrapper — offline cracking. No network target; captures pot into engagement.
+#   ra-john --format=nt --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
+set -euo pipefail
+RA_HOME="${REDALERT_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"; PY=python3
+pot="$($PY -c "import evidence; print(evidence.scan_path('john.pot'))")"
+$PY -c "import evidence,sys; evidence.log_command(['ra-john']+sys.argv[1:])" "$@" 2>/dev/null || true
+exec john --pot="$pot" "$@"

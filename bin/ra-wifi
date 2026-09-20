@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Scope-aware Wi-Fi capture wrapper — authorized-AP handshake capture for WPA cracking prep.
+#
+# Wi-Fi authorization is by BSSID/ESSID you OWN (scope.yaml `wifi` block), enforced here.
+# Requires a monitor-mode-capable adapter passed through to the container
+# (see docker-compose.yml: cap_add NET_ADMIN/NET_RAW, network_mode host, USB device).
+#
+#   ra-wifi capture --bssid AA:BB:CC:DD:EE:FF --channel 6 --iface wlan0mon
+# Produces a handshake in the engagement loot/ folder, ready for:
+#   ra-hashcat -m 22000 <capture>.hc22000 /usr/share/wordlists/rockyou.txt
+set -euo pipefail
+RA_HOME="${REDALERT_HOME:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"; PY=python3
+
+sub="${1:-}"; shift || true
+bssid=""; essid=""; channel=""; iface="${RA_WIFI_IFACE:-wlan0mon}"
+while [ $# -gt 0 ]; do case "$1" in
+  --bssid) bssid="$2"; shift 2;; --essid) essid="$2"; shift 2;;
+  --channel) channel="$2"; shift 2;; --iface) iface="$2"; shift 2;;
+  *) echo "unknown arg: $1" >&2; exit 2;; esac; done
+
+case "$sub" in
+  capture)
+    # Enforce Wi-Fi scope. Fail closed.
+    if ! $PY -c "import scope,sys; scope.check_wifi(sys.argv[1] or None, sys.argv[2] or None)" "$bssid" "$essid" 2>/dev/null; then
+      $PY -c "import scope,sys; scope.check_wifi(sys.argv[1] or None, sys.argv[2] or None)" "$bssid" "$essid" || true
+      echo "ra-wifi: refusing — target AP not in your authorized wifi allowlist." >&2; exit 3
+    fi
+    if ! command -v hcxdumptool >/dev/null; then echo "hcxdumptool not installed" >&2; exit 5; fi
+    out="$($PY -c "import evidence; c=evidence.current(); print((c/'loot') if c else '/tmp')")"
+    ts=$(date +%H%M%S); cap="$out/wifi_${ts}.pcapng"
+    echo "[ra-wifi] AUTHORIZED AP only. bssid=$bssid essid=$essid iface=$iface -> $cap"
+    $PY -c "import evidence,sys; evidence.log_command(['ra-wifi','capture']+sys.argv[1:])" "$bssid" "$essid" 2>/dev/null || true
+    # hcxdumptool filters to the authorized BSSID; convert to hashcat 22000 after capture.
+    exec hcxdumptool -i "$iface" -w "$cap" ${bssid:+--filterlist_ap="$bssid" --filtermode=2}
+    ;;
+  convert)
+    # ra-wifi convert <capture.pcapng>  ->  <capture>.hc22000 for hashcat -m 22000
+    src="${1:?usage: ra-wifi convert <capture.pcapng>}"
+    exec hcxpcapngtool -o "${src%.*}.hc22000" "$src"
+    ;;
+  *) echo "usage: ra-wifi {capture|convert} ..." >&2; exit 2;;
+esac
