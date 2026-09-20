@@ -47,8 +47,12 @@ services:
     image: ollama/ollama:latest
     container_name: redalert-ollama
     profiles: ["micro", "baron"]
-    ports:
-      - "11434:11434"
+    # No host port published: the toolkit reaches the sidecar over the compose network at
+    # http://ollama:11434 (see RA_AI_MODEL / OLLAMA_HOST), which also avoids clashing with
+    # any ollama you already run on the host. To expose it to the host, add:
+    #   ports: ["11434:11434"]   (or a free port like "11435:11434")
+    expose:
+      - "11434"
     volumes:
       - ollama_models:/root/.ollama
     # For GPU-accelerated inference, add the same nvidia deploy block as above.
