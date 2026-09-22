@@ -19,6 +19,11 @@ PY="python3"
 # Target is the final positional argument.
 target="${!#}"
 
+# Enforce VPN egress if required (fail closed), then scope.
+if ! $PY "$RA_HOME/lib/vpn.py" require >/dev/null 2>&1; then
+  $PY "$RA_HOME/lib/vpn.py" require; echo "ra-nmap: refusing (VPN required, tunnel down)." >&2; exit 4
+fi
+
 # Enforce scope. Fail closed.
 if ! $PY "$RA_HOME/lib/scope.py" "$target" >/dev/null 2>&1; then
   $PY "$RA_HOME/lib/scope.py" "$target"   # re-run to print the reason

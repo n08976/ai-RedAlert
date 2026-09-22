@@ -31,3 +31,6 @@ venv/
 *.swp
 .idea/
 .vscode/
+
+# VPN provider service credentials
+.env.vpn

@@ -1,0 +1,56 @@
+# VPN egress override — route ALL toolkit traffic through a Surfshark/Nord VPN via gluetun,
+# so you can test your OWN firewall rules from external / alternate source locations.
+#
+# Layer it on top of the base compose (the Makefile does this for you):
+#   cp .env.vpn.example .env.vpn      # fill in provider + SERVICE credentials + exit country
+#   make vpn-up                       # brings up gluetun, waits healthy, prints the exit IP
+#   make shell-vpn                    # toolkit shell whose traffic egresses via the VPN
+#   make vpn-down
+#
+# Safety model (reviewed with pal / gpt-5.2):
+#   * gluetun owns the network namespace and runs a kill-switch firewall (deny all non-VPN).
+#   * the toolkit shares that namespace (network_mode: service:gluetun) and keeps only
+#     NET_RAW — no NET_ADMIN, so tools can't punch holes in the kill-switch.
+#   * RA_VPN_REQUIRED=1 makes ra auto / ra-nmap FAIL CLOSED unless the tunnel is confirmed up
+#     with a real exit IP (lib/vpn.py). Traffic cannot originate from your real IP.
+#   * In VPN mode the local LLM sidecar is unreachable by design (different netns).
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: redalert-gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER:-surfshark}
+      - VPN_TYPE=${VPN_TYPE:-openvpn}
+      # Provider "service credentials" (NOT your account login) — see .env.vpn.example.
+      - OPENVPN_USER=${OPENVPN_USER:-}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD:-}
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY:-}
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES:-United States}
+      - TZ=${TZ:-America/New_York}
+      # Pin the kill-switch on and drop IPv6 so nothing leaks outside the tunnel.
+      - FIREWALL=on
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "https://api.ipify.org"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  toolkit:
+    # Ride gluetun's VPN network namespace. This replaces the toolkit's own networking, so
+    # the compose bridge (and the ollama sidecar) are not reachable in VPN mode.
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    environment:
+      RA_VPN_REQUIRED: "1"      # ra auto / ra-nmap fail closed unless the tunnel is confirmed
+      OLLAMA_HOST: ""           # no local LLM in VPN mode (different netns)

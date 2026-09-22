@@ -18,11 +18,12 @@ services:
     hostname: redalert
     stdin_open: true
     tty: true
-    # Raw sockets for SYN scans, OS detection, and Responder. (Wi-Fi monitor mode needs
-    # more — see the passthrough block below.)
+    # Raw sockets for SYN scans and OS detection. Kept minimal (NET_RAW only) so VPN mode
+    # (docker-compose.vpn.yml) stays leak-safe — NET_ADMIN in a shared VPN netns could
+    # weaken gluetun's kill-switch. LAN/Wi-Fi work that needs NET_ADMIN uses the separate
+    # passthrough block below.
     cap_add:
       - NET_RAW
-      - NET_ADMIN
     environment:
       REDALERT_ENGAGEMENT: ${REDALERT_ENGAGEMENT:-}
       OLLAMA_HOST: http://ollama:11434

@@ -89,6 +89,9 @@ loot, notes, and a timeline you can fold straight into a report.
 | `make test` | Run the scope-engine self-tests (no container needed) |
 | `make down` / `make clean` | Tear down the stack / remove the image |
 | `GPU=1 make shell` | Any target with GPU acceleration (needs nvidia-container-toolkit) |
+| `make vpn-up` | Bring up VPN egress (gluetun) + confirm the external exit IP |
+| `make shell-vpn` | Toolkit shell routed through the VPN (test firewall from outside) |
+| `make vpn-status` / `make vpn-down` | Show exit IP / tear down the VPN |
 
 ### `ra` (inside the toolkit — the control CLI)
 | Command | What it does |
@@ -97,6 +100,7 @@ loot, notes, and a timeline you can fold straight into a report.
 | `ra use <slug>` | Print the `export` line to switch the active engagement |
 | `ra list` | List engagements |
 | `ra scope` | Show the active scope allowlist |
+| `ra vpn` | Show VPN egress status (interface, tunnel, exit IP) |
 | `ra check <target…>` | Test whether target(s) are in scope |
 | `ra tools` | List the `ra-*` tool wrappers |
 | `ra auto <target> [flags]` | **Autonomous** assessment (see flags below) |

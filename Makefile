@@ -2,6 +2,7 @@
 # Set GPU=1 to layer the NVIDIA override (needs nvidia-container-toolkit on the host):
 #   GPU=1 make shell        GPU=1 make llm-baron
 COMPOSE = docker compose -f docker/docker-compose.yml $(if $(GPU),-f docker/docker-compose.gpu.yml)
+COMPOSE_VPN = docker compose --env-file .env.vpn -f docker/docker-compose.yml -f docker/docker-compose.vpn.yml $(if $(GPU),-f docker/docker-compose.gpu.yml)
 MICRO_MODEL ?= qwen2.5:3b
 BARON_MODEL ?= hf.co/AlicanKiraz0/BaronLLM-v2-OffensiveSecurityLLM-Q8:Q8_0
 
@@ -44,10 +45,33 @@ own: ## Reclaim host ownership of engagement files (root-owned; tools need root)
 	docker run --rm -v $(PWD)/engagements:/e ai-redalert:latest chown -R $(shell id -u):$(shell id -g) /e
 	@echo "engagement files now owned by you"
 
+vpn-up: ## Bring up the VPN egress (gluetun) and confirm the external exit IP
+	@test -f .env.vpn || { echo "Missing .env.vpn — cp .env.vpn.example .env.vpn and fill it in."; exit 1; }
+	$(COMPOSE_VPN) up -d gluetun
+	@echo "waiting for the tunnel to come up..."; \
+	for i in $$(seq 1 20); do \
+	  ip=$$(docker run --rm --network=container:redalert-gluetun ai-redalert:latest curl -s --max-time 6 https://api.ipify.org 2>/dev/null); \
+	  if [ -n "$$ip" ]; then echo "\033[32m✓ VPN egress IP: $$ip\033[0m  (your scans now originate here)"; exit 0; fi; \
+	  sleep 3; \
+	done; \
+	echo "\033[31m✗ Could not confirm a VPN exit IP — tunnel not up. Check .env.vpn creds / provider status.\033[0m"; \
+	docker logs --tail 20 redalert-gluetun; exit 1
+
+shell-vpn: vpn-up ## Toolkit shell whose traffic egresses via the VPN (fail-closed)
+	$(COMPOSE_VPN) run --rm toolkit bash
+
+vpn-status: ## Show the current VPN egress status / exit IP
+	@docker ps --filter name=redalert-gluetun --format "gluetun: {{.Status}}" || true
+	@docker run --rm --network=container:redalert-gluetun ai-redalert:latest curl -s --max-time 6 https://api.ipify.org 2>/dev/null \
+	  && echo "  <- current exit IP" || echo "VPN not up (no exit IP)."
+
+vpn-down: ## Tear down the VPN egress
+	$(COMPOSE_VPN) down
+
 down: ## Tear down the whole stack
 	$(COMPOSE) down
 
 clean: ## Remove the toolkit image
 	docker image rm ai-redalert:latest 2>/dev/null || true
 
-.PHONY: help build shell scope llm-micro llm-baron llm-down gpu-check test own down clean
+.PHONY: help build shell scope llm-micro llm-baron llm-down gpu-check test own vpn-up shell-vpn vpn-status vpn-down down clean

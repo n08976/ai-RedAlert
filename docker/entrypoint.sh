@@ -26,6 +26,15 @@ else
   echo "     Copy scope/scope.example.yaml -> scope/scope.yaml and add your lab targets."
   echo "     Tools will refuse to run until scope is set."
 fi
+if [ -n "${RA_VPN_REQUIRED:-}" ]; then
+  vpn_ip="$(python3 "$RA_HOME/lib/vpn.py" 2>/dev/null | python3 -c 'import sys,json;print(json.load(sys.stdin).get("exit_ip") or "")' 2>/dev/null)"
+  if [ -n "$vpn_ip" ]; then
+    echo "  🛡  VPN egress ACTIVE — traffic originates from $vpn_ip"
+  else
+    echo "  ⚠  VPN egress REQUIRED but tunnel is DOWN — scans will fail closed."
+    echo "     Bring it up on the host with: make vpn-up"
+  fi
+fi
 echo "  ---------------------------------------------------------------"
 echo "  ra help   → commands      ra tools → wrappers      ra new <name> → start"
 echo

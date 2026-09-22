@@ -15,6 +15,7 @@ ai-RedAlert — authorized offensive-security lab toolkit
   ra list                  List engagements
   ra auto <target>         Autonomously assess a target (IP/host/URL/CIDR) and plan the attack
   ra run --only <cats> <t> Explicit mode: run chosen categories (web,smb,ssh,…)
+  ra vpn                   Show VPN egress status (interface, tunnel, exit IP)
   ra scope                 Show the active scope allowlist
   ra check <target...>     Test whether target(s) are in scope
   ra tools                 List available ra-* tool wrappers
@@ -44,6 +45,7 @@ case "$cmd" in
     ;;
   auto)    export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"; $PY "$RA_HOME/lib/orchestrator.py" "$@" ;;
   run)     export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"; $PY "$RA_HOME/lib/orchestrator.py" "$@" ;;
+  vpn)     export PYTHONPATH="$RA_HOME/lib:${PYTHONPATH:-}"; $PY "$RA_HOME/lib/vpn.py" "$@" ;;
   scope)   $PY "$RA_HOME/lib/scope.py" --show ;;
   check)   $PY "$RA_HOME/lib/scope.py" "$@" ;;
   tools)   ls -1 "$RA_HOME/bin" | grep '^ra-' || true ;;

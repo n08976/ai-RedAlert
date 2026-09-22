@@ -28,6 +28,7 @@ from urllib.parse import urlparse
 
 import scope as scope_mod
 import evidence
+import vpn
 
 # ── data model ────────────────────────────────────────────────────────────────
 @dataclass
@@ -381,6 +382,7 @@ def execute_safe(findings: list[dict], run_exploit: bool = False) -> list[tuple[
 def orchestrate(target: str, full: bool = False, run_exploit: bool = False,
                 use_llm: bool = True, do_act: bool = True) -> str:
     kind, host_str = classify_target(target)
+    vpn.require_vpn()               # fail closed if VPN mode is required but tunnel is down
     scope_mod.check_target(host_str)
 
     targets = discover_hosts(target) if kind == "cidr" else [host_str]
@@ -432,6 +434,7 @@ CATEGORY_SERVICES = {
 
 def run_categories(target: str, categories: list[str], run_exploit: bool = False) -> str:
     kind, host_str = classify_target(target)
+    vpn.require_vpn()
     scope_mod.check_target(host_str)
     wanted = set()
     for c in categories:
@@ -475,6 +478,8 @@ def cli(argv: list[str]) -> int:
         else:
             orchestrate(args.target, full=args.full, run_exploit=args.exploit,
                         use_llm=not args.no_llm, do_act=not args.no_act)
+    except vpn.VpnError as e:
+        print(f"✗ VPN gate: {e}", file=__import__("sys").stderr); return 4
     except scope_mod.ScopeError as e:
         print(f"✗ out of scope: {e}", file=__import__("sys").stderr); return 3
     return 0
